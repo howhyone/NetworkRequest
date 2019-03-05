@@ -16,6 +16,7 @@
 		C915AB2822006C3D00771D6F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C915AB2722006C3D00771D6F /* main.m */; };
 		C915AB3222006C3D00771D6F /* NetworkRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C915AB3122006C3D00771D6F /* NetworkRequestTests.m */; };
 		C915AB3D22006C3D00771D6F /* NetworkRequestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C915AB3C22006C3D00771D6F /* NetworkRequestUITests.m */; };
+		C9B9AFCF221415E300462342 /* jjy1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C9B9AFCE221415E300462342 /* jjy1.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		C915AB3822006C3D00771D6F /* NetworkRequestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkRequestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915AB3C22006C3D00771D6F /* NetworkRequestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkRequestUITests.m; sourceTree = "<group>"; };
 		C915AB3E22006C3D00771D6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9B9AFCE221415E300462342 /* jjy1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = jjy1.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				C915AB1622006C3C00771D6F /* AppDelegate.m */,
 				C915AB1822006C3C00771D6F /* ViewController.h */,
 				C915AB1922006C3C00771D6F /* ViewController.m */,
+				C9B9AFCE221415E300462342 /* jjy1.jpg */,
 				C915AB1B22006C3C00771D6F /* Main.storyboard */,
 				C915AB2122006C3D00771D6F /* Assets.xcassets */,
 				C915AB2322006C3D00771D6F /* LaunchScreen.storyboard */,
@@ -239,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C915AB2522006C3D00771D6F /* LaunchScreen.storyboard in Resources */,
+				C9B9AFCF221415E300462342 /* jjy1.jpg in Resources */,
 				C915AB2222006C3D00771D6F /* Assets.xcassets in Resources */,
 				C915AB1D22006C3C00771D6F /* Main.storyboard in Resources */,
 			);

@@ -5,18 +5,22 @@
 //  Created by mob on 2019/1/29.
 //  Copyright © 2019年 mob. All rights reserved.
 //https://blog.csdn.net/ch_quan/article/details/54943652:NSURLSession学习
+/**********
+    NSURLSessinUploadTask 参考：https://www.jianshu.com/p/88bcccbf7c96 和https://blog.csdn.net/hherima/article/details/70857399
+ ************/
 
 #import "ViewController.h"
 
-@interface ViewController ()<NSURLConnectionDelegate,NSURLConnectionDataDelegate,NSURLConnectionDownloadDelegate>
+@interface ViewController ()<NSURLConnectionDelegate,NSURLConnectionDataDelegate,NSURLConnectionDownloadDelegate,NSURLSessionDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *urlImageView;
 @property(nonatomic, strong) NSURL *imageUrl;
 @property(nonatomic, strong) NSFileHandle *fileHandle;
 
-
 @end
+
 long int currentLength = 0;
 long int fileLength = 0;
+#define UploadBoundary @"KhTmLbOuNdArY0001"
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -75,10 +79,9 @@ long int fileLength = 0;
         }
     }];
     [dataTask resume];
-    
-    *******/
-    
-/********** potst请求 ***********
+    ********/
+ 
+/********** post请求 ***********
     NSURL *stringurl = [NSURL URLWithString:@"http://api.nohttp.net/postBody"];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:stringurl];
     [urlRequest setHTTPMethod:@"POST"];
@@ -115,12 +118,10 @@ long int fileLength = 0;
     
     **********/
     
-    /*************文件下载 **********/
+    /*************文件下载 **********
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:_imageUrl];
     [request setTimeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
     NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
             NSLog(@"Failed error is %@",error);
@@ -133,9 +134,54 @@ long int fileLength = 0;
         }
     }];
     [downloadTask resume];
+    *****/
     
+    //************文件上传
+    NSString *urlString = @"";
+    UIImage *jjyImg = [UIImage imageNamed:@"jjy1.jpg"];
+    NSData *imageData = UIImageJPEGRepresentation(jjyImg, 1.0);
+    NSString *name = @"";
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"POST"];
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
+    [request setTimeoutInterval:20.0];
+    NSString *headerString = [NSString stringWithFormat:@"multipart/form-data; charset=utf-8; boundary=%@",UploadBoundary];
+    [request setValue:headerString forHTTPHeaderField:@"Content-Type"];
+    NSMutableData *requestData = [NSMutableData data];
+    NSMutableString *myString = [NSMutableString stringWithFormat:@"--%@\r\n",UploadBoundary];
+    [myString appendString:@"Content-Disposition: form-data; name=\"appid\"\r\n\r\n"];
+    [myString appendString:@"100118"];
+    [myString appendString:[NSString stringWithFormat:@"\r\n--%@\r\n",UploadBoundary]];
+    [myString appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n",name]];
+    [myString appendString:@"Content-Type: image/jpeg\r\n\r\n"];
+//  转化为二进制
+    [requestData appendData:[myString dataUsingEncoding:NSUTF8StringEncoding]];
+    [requestData appendData:imageData];
+    [requestData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",UploadBoundary]dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    request.HTTPBody = requestData;
+    
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForRequest = 20.0;
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    
+    NSURLSessionDataTask *uploadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Failed :error is ===== %@",error);
+        }
+        else{
+            NSLog(@"data is  ====== %@",data);
+        }
+    }];
+    [uploadTask resume];
 }
 
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    NSLog(@"Session %@ download task %@ wrote an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n", session, task, bytesSent, totalBytesSent, totalBytesExpectedToSend);
+    
+}
 
 #pragma mark ------ NSURLConnect 代理
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
